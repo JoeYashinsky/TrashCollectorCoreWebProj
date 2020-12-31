@@ -31,6 +31,26 @@ namespace TrashCollectorCoreWebApplication.Models
         [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
 
+        [Display(Name = "Regular Pickup Day")]
+        public string RegularPickupDay { get; set; }
+
+        [DisplayFormat(DataFormatString = "0:dd MM yyyy")]
+        [Display(Name = "Extra Pickup Date (optional)")]
+        [DataType(DataType.Date)]
+        public DateTime? ExtraPickupDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd MM yyyy")]
+        [Display(Name = "Suspend Service Date (optional)")]
+        [DataType(DataType.Date)]
+        public DateTime? SuspendServiceDate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd MM yyyy")]
+        [Display(Name = "Suspension End Date (optional)")]
+        [DataType(DataType.Date)]
+        public DateTime? SuspensionEndDate { get; set; }
+
+        [Display(Name = "Balance Due")]
+        public double BalanceDue { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }

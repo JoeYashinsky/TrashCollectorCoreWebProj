@@ -19,8 +19,8 @@ namespace TrashCollectorCoreWebApplication.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Display(Name = "Zip Code")]
-        public string ZipCode { get; set; }
+        [Display(Name = "Route Zip Code")]
+        public string RouteZipCode { get; set; }
 
 
         [ForeignKey("IdentityUser")]

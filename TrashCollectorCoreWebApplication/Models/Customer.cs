@@ -19,6 +19,18 @@ namespace TrashCollectorCoreWebApplication.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Display(Name = "Street Address")]
+        public string StreetAddress { get; set; }
+
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Display(Name = "State")]
+        public string State { get; set; }
+
+        [Display(Name = "Zip Code")]
+        public string ZipCode { get; set; }
+
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }

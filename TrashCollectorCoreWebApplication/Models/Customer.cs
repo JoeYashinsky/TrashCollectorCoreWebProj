@@ -49,6 +49,9 @@ namespace TrashCollectorCoreWebApplication.Models
         [DataType(DataType.Date)]
         public DateTime? SuspensionEndDate { get; set; }
 
+        [Display(Name = "Pickup Confirmed")]
+        public bool PickupConfirmed { get; set; }
+
         [Display(Name = "Balance Due")]
         public double BalanceDue { get; set; }
 

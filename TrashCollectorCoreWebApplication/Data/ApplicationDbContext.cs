@@ -36,9 +36,22 @@ namespace TrashCollectorCoreWebApplication.Data
                     NormalizedName = "EMPLOYEE"
                 }
              );
+
+            builder.Entity<Day>()
+                .HasData(
+                new Day
+                {
+                    Id = 1,
+                    Name = "Monday"
+                }, new Day
+                {
+                    Id = 2,
+                    Name = "Tuesday"
+                });
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Day> Days { get; set; }
 
     }
 }

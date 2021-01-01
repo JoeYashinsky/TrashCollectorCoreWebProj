@@ -5,7 +5,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TrashCollectorCoreWebApplication.Data;
+using TrashCollectorCoreWebApplication.Models;
 
 namespace TrashCollectorCoreWebApplication.Controllers
 {
@@ -36,13 +38,26 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: CustomersController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            
+            return View(customer);
         }
 
         // GET: CustomersController/Create
         public ActionResult Create()
         {
-            return View();
+            var days = _context.EligibleDays.ToList();
+            Customer customer = new Customer()
+            {
+                EligibleDays = new SelectList(days, "Id", "Name")
+            };
+            return View(customer);
         }
 
         // POST: CustomersController/Create

@@ -31,8 +31,10 @@ namespace TrashCollectorCoreWebApplication.Models
         [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
 
+        [ForeignKey("Day")]
         [Display(Name = "Regular Pickup Day")]
-        public string RegularPickupDay { get; set; }
+        public int DayId { get; set; }
+        public Day Day { get; set; }
 
         [DisplayFormat(DataFormatString = "0:dd MM yyyy")]
         [Display(Name = "Extra Pickup Date (optional)")]

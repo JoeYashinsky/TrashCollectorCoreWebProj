@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollectorCoreWebApplication.Data;
 
-namespace TrashCollectorCoreWebApplication.Data.Migrations
+namespace TrashCollectorCoreWebApplication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210101080319_CustomersEmployees1")]
-    partial class CustomersEmployees1
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,15 +48,15 @@ namespace TrashCollectorCoreWebApplication.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "45e96607-5458-4cc1-8e6e-caa591181bf5",
-                            ConcurrencyStamp = "4b404bc3-b701-4533-958b-c59e93149aa9",
+                            Id = "e90146e0-67a4-4fea-987d-54a0864bc343",
+                            ConcurrencyStamp = "f048f977-c4fd-44c9-b65c-434b415964f5",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "89802717-190f-4fd6-9224-5a6e6e8e1db8",
-                            ConcurrencyStamp = "5d11b451-997a-4e64-8d08-a75a58e0fd7a",
+                            Id = "e4779d39-e594-4df6-935e-08359ff74c25",
+                            ConcurrencyStamp = "1dcaec67-24ca-4ca6-9324-cf53c78559b6",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -246,6 +244,9 @@ namespace TrashCollectorCoreWebApplication.Data.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DayId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ExtraPickupDate")
                         .HasColumnType("datetime2");
 
@@ -260,9 +261,6 @@ namespace TrashCollectorCoreWebApplication.Data.Migrations
 
                     b.Property<bool>("PickupConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RegularPickupDay")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
@@ -281,9 +279,53 @@ namespace TrashCollectorCoreWebApplication.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DayId");
+
                     b.HasIndex("IdentityUserId");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("TrashCollectorCoreWebApplication.Models.Day", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Days");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Monday"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Tuesday"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Wednesday"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Thursday"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Friday"
+                        });
                 });
 
             modelBuilder.Entity("TrashCollectorCoreWebApplication.Models.Employee", b =>
@@ -365,6 +407,12 @@ namespace TrashCollectorCoreWebApplication.Data.Migrations
 
             modelBuilder.Entity("TrashCollectorCoreWebApplication.Models.Customer", b =>
                 {
+                    b.HasOne("TrashCollectorCoreWebApplication.Models.Day", "Day")
+                        .WithMany()
+                        .HasForeignKey("DayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId");

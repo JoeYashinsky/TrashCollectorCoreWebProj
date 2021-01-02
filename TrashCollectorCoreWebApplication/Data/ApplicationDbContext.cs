@@ -47,6 +47,18 @@ namespace TrashCollectorCoreWebApplication.Data
                 {
                     Id = 2,
                     Name = "Tuesday"
+                }, new Day
+                {
+                    Id = 3,
+                    Name = "Wednesday"
+                }, new Day
+                {
+                    Id = 4,
+                    Name = "Thursday"
+                }, new Day
+                {
+                    Id = 5,
+                    Name = "Friday"
                 });
         }
         public DbSet<Customer> Customers { get; set; }

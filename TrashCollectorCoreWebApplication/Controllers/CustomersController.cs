@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TrashCollectorCoreWebApplication.Data;
 using TrashCollectorCoreWebApplication.Models;
@@ -52,10 +53,10 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: CustomersController/Create
         public ActionResult Create()
         {
-            var days = _context.EligibleDays.ToList();
+            var days = _context.Days.ToList();
             Customer customer = new Customer()
             {
-                EligibleDays = new SelectList(days, "Id", "Name")
+                Days = new SelectList(days, "Id", "Name")
             };
             return View(customer);
         }

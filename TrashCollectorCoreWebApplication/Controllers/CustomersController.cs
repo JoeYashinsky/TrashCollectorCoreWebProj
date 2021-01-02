@@ -97,29 +97,45 @@ namespace TrashCollectorCoreWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Customer customer)
         {
-            try
+            if (id != customer.Id)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            var loggedInCustomer = _context.Customers.SingleOrDefault(m => m.Id == id);
+            loggedInCustomer.FirstName = customer.FirstName;
+            loggedInCustomer.LastName = customer.LastName;
+            loggedInCustomer.StreetAddress = customer.StreetAddress;
+            loggedInCustomer.City = customer.City;
+            loggedInCustomer.State = customer.State;
+            loggedInCustomer.ZipCode = customer.ZipCode;
+            loggedInCustomer.DayId = customer.DayId;
+            loggedInCustomer.Days = new SelectList(_context.Days.ToList(), "Id", "Name");
+            loggedInCustomer.ExtraPickupDate = customer.ExtraPickupDate;
+            loggedInCustomer.SuspendServiceDate = customer.SuspendServiceDate;
+            loggedInCustomer.SuspensionEndDate = customer.SuspensionEndDate;
+            
+            _context.SaveChanges();
+            return RedirectToAction("Details", customer);
         }
 
         // GET: CustomersController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var customer = _context.Customers.FirstOrDefault(s => s.Id == id);
+            return View(customer);
         }
 
         // POST: CustomersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Customer customer)
         {
             try
             {
+                var removedCustomer = _context.Customers.SingleOrDefault(m => m.Id == id);
+                _context.Remove(removedCustomer);   
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch

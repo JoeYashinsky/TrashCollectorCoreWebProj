@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +36,9 @@ namespace TrashCollectorCoreWebApplication.Models
         [Display(Name = "Regular Pickup Day")]
         public int DayId { get; set; }
         public Day Day { get; set; }
+
+        [NotMapped]
+        public SelectList Days { get; set; }
 
         [DisplayFormat(DataFormatString = "0:dd MM yyyy")]
         [Display(Name = "Extra Pickup Date (optional)")]

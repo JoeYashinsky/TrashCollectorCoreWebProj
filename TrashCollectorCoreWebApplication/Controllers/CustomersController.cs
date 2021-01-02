@@ -30,7 +30,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
 
             if (customer == null)
             {
-                return RedirectToAction("Create");  //if no Id found (not a customer yet), take to Create pg.
+                return RedirectToAction("Create");  //if no Id found (not a customer yet), take to Create page
             }
 
             return View("Details", customer);  //If valid userId is found, direct this customer to his designated "Details" page
@@ -56,7 +56,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
             var days = _context.Days.ToList();
             Customer customer = new Customer()
             {
-                Days = new SelectList(days, "Id", "Name")
+                Days = new SelectList(days, "Id", "Name")  //add unmapped (no column in table) SelectList Days property in Cust model to remove error
             };
             return View(customer);
         }

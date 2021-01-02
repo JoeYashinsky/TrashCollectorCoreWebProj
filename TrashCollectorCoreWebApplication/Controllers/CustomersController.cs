@@ -64,10 +64,14 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // POST: CustomersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Customer customer)
         {
             try
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer.IdentityUserId = userId;
+                _context.Customers.Add(customer);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -79,13 +83,19 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: CustomersController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var customer = _context.Customers.SingleOrDefault(m => m.Id == id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            customer.Days = new SelectList(_context.Days.ToList(), "Id", "Name");
+            return View(customer);
         }
 
         // POST: CustomersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Customer customer)
         {
             try
             {

@@ -122,7 +122,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: CustomersController/Delete/5
         public ActionResult Delete(int id)
         {
-            var customer = _context.Customers.FirstOrDefault(s => s.Id == id);
+            var customer = _context.Customers.FirstOrDefault(c => c.Id == id);
             return View(customer);
         }
 
@@ -133,7 +133,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         {
             try
             {
-                var removedCustomer = _context.Customers.SingleOrDefault(m => m.Id == id);
+                var removedCustomer = _context.Customers.SingleOrDefault(c => c.Id == id);
                 _context.Remove(removedCustomer);   
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));

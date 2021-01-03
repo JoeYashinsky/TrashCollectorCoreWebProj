@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrashCollectorCoreWebApplication.Data;
+using TrashCollectorCoreWebApplication.Models;
 
 namespace TrashCollectorCoreWebApplication.Controllers
 {
@@ -42,25 +43,53 @@ namespace TrashCollectorCoreWebApplication.Controllers
             return View(allCustomersToday);
         }
 
+        // POST: EmployeesController (Filter)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult IndexFilteredByDay(string pickupsByDay)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            var routeZipCodeCustomers = _context.Customers.Where(c => c.ZipCode == employee.RouteZipCode).ToList();
+            var filteredCustomers = routeZipCodeCustomers.Where(c => c.Day.Name == DayOfWeek).ToList();
+
+            return View(filteredCustomers);
+
+
+        }
+
         // GET: EmployeesController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return View(employee);
         }
 
         // GET: EmployeesController/Create
         public ActionResult Create()
         {
+            Employee employee = new Employee();
             return View();
         }
 
         // POST: EmployeesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Employee employee)
         {
             try
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                employee.IdentityUserId = userId;
+                _context.Employees.Add(employee);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -72,37 +101,64 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: EmployeesController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var employee = _context.Employees.SingleOrDefault(m => m.Id == id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            return View(employee);
         }
 
         // POST: EmployeesController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Employee employee)
         {
-            try
+            var loggedInEmployee = _context.Customers.SingleOrDefault(c => c.Id == id);
+            loggedInEmployee.FirstName = employee.FirstName;
+            loggedInEmployee.LastName = employee.LastName;
+            loggedInEmployee.ZipCode = employee.RouteZipCode;
+
+            _context.SaveChanges();
+            return RedirectToAction("Details", employee);
+        }
+
+        //public bool PickupConfirmed { get; set; }  (property in Customer model)
+        public ActionResult DriverConfirms(int id)  //need to confirm that a Customer's trash was picked up, then apply charge to that Customer
+        {
+            var customer = _context.Customers.Where(c => c.Id == id).SingleOrDefault();
+            if(customer.PickupConfirmed == true)
+            {
+                customer.BalanceDue += 15.00;
+                _context.Update(customer);
+                _context.SaveChanges();
+            }
+            else
             {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(customer);
+
+            
         }
 
         // GET: EmployeesController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var employee = _context.Employees.FirstOrDefault(c => c.Id == id);
+            return View(employee);
         }
 
         // POST: EmployeesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Employee employee)
         {
             try
             {
+                var removedEmployee = _context.Customers.SingleOrDefault(c => c.Id == id);
+                _context.Remove(removedEmployee);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -25,7 +25,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         {
             //Access currently signed-in user. This line will return user's PK Id from AspNetUsers table. If not signed in, userId null.
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var employee = _context.Employees.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            var employee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
 
             if (employee == null)
             {
@@ -43,19 +43,17 @@ namespace TrashCollectorCoreWebApplication.Controllers
             return View(allCustomersToday);
         }
 
-        // POST: EmployeesController (Filter)
+        // POST: EmployeesController (FilterByDay)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult IndexFilteredByDay(string pickupsByDay)
+        public ActionResult IndexFilteredByDay(string pickupsForThisDay)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var employee = _context.Employees.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            var employee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
             var routeZipCodeCustomers = _context.Customers.Where(c => c.ZipCode == employee.RouteZipCode).ToList();
-            var filteredCustomers = routeZipCodeCustomers.Where(c => c.Day.Name == DayOfWeek).ToList();
+            var filteredCustomers = routeZipCodeCustomers.Where(c => c.Day.Name == pickupsForThisDay).ToList();
 
             return View(filteredCustomers);
-
-
         }
 
         // GET: EmployeesController/Details/5
@@ -101,7 +99,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: EmployeesController/Edit/5
         public ActionResult Edit(int id)
         {
-            var employee = _context.Employees.SingleOrDefault(m => m.Id == id);
+            var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
             if (employee == null)
             {
                 return NotFound();

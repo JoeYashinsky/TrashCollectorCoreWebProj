@@ -33,7 +33,8 @@ namespace TrashCollectorCoreWebApplication.Controllers
             }
 
             //Need to filter Customers list to present this Employee with specific pickups scheduled for this day and in employee route zip
-            var routeZipCodeCustomers = _context.Customers.Where(c => c.ZipCode == employee.RouteZipCode).ToList();
+            var customerList = _context.Customers.Include(c => c.Day).ToList();
+            var routeZipCodeCustomers = customerList.Where(c => c.ZipCode == employee.RouteZipCode).ToList();
             var currentDay = DateTime.Today.DayOfWeek.ToString();
             var regularPickupCustomers = routeZipCodeCustomers.Where(c => c.Day.Name == currentDay).ToList();
             //Need to also account for one-time (extra) pickups or possible suspensions of service

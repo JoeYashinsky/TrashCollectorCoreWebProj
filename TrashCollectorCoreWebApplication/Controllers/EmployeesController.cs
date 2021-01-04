@@ -60,8 +60,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: EmployeesController/Details/5
         public ActionResult Details(int id)
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var employee = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+            var employee = _context.Employees.Include(e => e.IdentityUser).FirstOrDefault(e => e.Id == id);
 
             if (employee == null)
             {
@@ -113,13 +112,19 @@ namespace TrashCollectorCoreWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Employee employee)
         {
-            var loggedInEmployee = _context.Customers.SingleOrDefault(c => c.Id == id);
+            if (id != employee.Id)
+            {
+                return NotFound();
+            }
+
+            var loggedInEmployee = _context.Employees.SingleOrDefault(m => m.Id == id);
             loggedInEmployee.FirstName = employee.FirstName;
             loggedInEmployee.LastName = employee.LastName;
-            loggedInEmployee.ZipCode = employee.RouteZipCode;
+            loggedInEmployee.RouteZipCode = employee.RouteZipCode;
+
 
             _context.SaveChanges();
-            return RedirectToAction("Details", employee);
+            return RedirectToAction("Details");
         }
 
         //public bool PickupConfirmed { get; set; }  (property in Customer model)

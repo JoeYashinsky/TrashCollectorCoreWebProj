@@ -38,8 +38,11 @@ namespace TrashCollectorCoreWebApplication.Controllers
             var currentDay = DateTime.Today.DayOfWeek.ToString();
             var regularPickupCustomers = routeZipCodeCustomers.Where(c => c.Day.Name == currentDay).ToList();
             //Need to also account for one-time (extra) pickups or possible suspensions of service
-            var extraCustomers = regularPickupCustomers.Where(c => c.ExtraPickupDate == DateTime.Today).ToList();
-            var allCustomersToday = extraCustomers.Where(c => c.SuspendServiceDate !<= DateTime.Today && c.SuspensionEndDate !>= DateTime.Today).ToList();
+            var extraCustomers = routeZipCodeCustomers.Where(c => c.ExtraPickupDate == DateTime.Today).ToList();
+            var allCustomersPreSuspension = regularPickupCustomers.Concat(extraCustomers);        //var newList = a.Concat(b);
+            //var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate! <= DateTime.Today && c.SuspensionEndDate! >= DateTime.Today).ToList();
+            var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate == null ? true : (c.SuspendServiceDate! <= DateTime.Today && c.SuspensionEndDate! >= DateTime.Today)).ToList();
+
 
             return View(allCustomersToday);
         }
@@ -47,7 +50,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // POST: EmployeesController (FilterByDay)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult IndexFilteredByDay(string pickupsForThisDay)
+        public ActionResult Index(string pickupsForThisDay)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
@@ -60,7 +63,8 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: EmployeesController/Details/5
         public ActionResult Details(int id)
         {
-            var employee = _context.Employees.Include(e => e.IdentityUser).FirstOrDefault(e => e.Id == id);
+            var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
+
 
             if (employee == null)
             {

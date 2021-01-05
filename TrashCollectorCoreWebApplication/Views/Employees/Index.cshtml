@@ -13,7 +13,7 @@
     <a asp-action="Day" asp-day="Tuesday">Tuesday</a> |
     <a asp-action="Day" asp-day="Wednesday">Wednesday</a> |
     <a asp-action="Day" asp-day="Thursday">Thursday</a> |
-    <a asp-action="Day" asp-day="Friday">Friday</a> |
+    <a asp-action="Day" asp-day="Friday">Friday</a>
 </form>
 <table class="table">
     <thead>
@@ -58,51 +58,117 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StreetAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Day.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExtraPickupDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SuspendServiceDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SuspensionEndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickupConfirmed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BalanceDue)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
-            </td>
-            <td>
-            <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.LastName)</a> 
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StreetAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ZipCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExtraPickupDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SuspendServiceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SuspensionEndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PickupConfirmed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BalanceDue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdentityUser.Id)
+                </td>
+                <td>
+                    <a asp-action="Details.Customer" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.LastName)</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Google Map</title>
+    <style>
+        #map{
+            height:400px;
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Google Map</h1>
+    <div id="map"></div>
+    <script>
+        function initMap(){
+            // Map options
+            var options = {
+                zoom: 8,
+                center: { lat: 42.5031, lng: -83.1835}
+            }
+
+            // New map
+            var map = new google.maps.Map(document.getElementById('map'), options);
+
+            /*
+            // Add marker
+            var marker = new google.maps.Marker({
+                position: { lat: 42.490700, lng: -83.187300 },
+                map: map
+            });
+
+            var infoWindow = new google.maps.InfoWindow({
+                content:'<h1>Kennedy Miles, 2874 Columbia Rd.</h1>'
+            })
+
+            marker.addListener('click', function () {
+                infoWindow.open(map, marker);
+            });*/
+
+            addMarker({ lat: 42.490700, lng: -83.187300 });  //Kennedy Miles: 2874 Columbia Rd., Berkley, MI 48072
+            addMarker({ lat: 42.505390, lng: -83.190390 });  //John Jenkins: 3682 Griffith Ave., Berkley, MI 48072
+            addMarker({ lat: 42.491460, lng: -83.185640 });  //Brian Pill: 2657 Harvard Rd., Berkley, MI 48072
+            addMarker({ lat: 42.496190, lng: -83.201870 });  //Bam Morris: 2649 Ellwood Ave., Berkley, MI 48072
+            addMarker({ lat: 42.498110, lng: -83.180710 });  //Kyle Watson: 2254 Franklin Rd., Berkley, MI 48072
+
+
+            //Add Marker Function
+            function addMarker(coords){
+                var marker = new google.maps.Marker({
+                    position:coords,
+                    map: map
+                });
+            }
+
+        }
+    </script>
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDYYPL3ME7dXDwfgm-beuuXK2CAVeorI3I&callback=initMap">
+    </script>
+</body>
+</html>

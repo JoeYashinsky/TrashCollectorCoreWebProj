@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrashCollectorCoreWebApplication.Data;
 using TrashCollectorCoreWebApplication.Models;
+using TrashCollectorCoreWebApplication.Models.ViewModel;
 
 namespace TrashCollectorCoreWebApplication.Controllers
 {
@@ -52,8 +53,11 @@ namespace TrashCollectorCoreWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(string pickupsForThisDay)
         {
+            DayOfWeekCustomers dayOfWeekCustomers = new DayOfWeekCustomers();
+
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+
             var routeZipCodeCustomers = _context.Customers.Where(c => c.ZipCode == employee.RouteZipCode).ToList();
             var filteredCustomers = routeZipCodeCustomers.Where(c => c.Day.Name == pickupsForThisDay).ToList();
 
@@ -128,7 +132,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
 
 
             _context.SaveChanges();
-            return RedirectToAction("Details");
+            return RedirectToAction("Details", employee);
         }
 
         //public bool PickupConfirmed { get; set; }  (property in Customer model)

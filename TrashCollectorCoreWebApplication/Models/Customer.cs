@@ -40,17 +40,14 @@ namespace TrashCollectorCoreWebApplication.Models
         [NotMapped]
         public SelectList Days { get; set; }
 
-        [DisplayFormat(DataFormatString = "0:dd MM yyyy")]
         [Display(Name = "Extra Pickup Date (optional)")]
         [DataType(DataType.Date)]
         public DateTime? ExtraPickupDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd MM yyyy")]
         [Display(Name = "Suspend Service Date (optional)")]
         [DataType(DataType.Date)]
         public DateTime? SuspendServiceDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd MM yyyy")]
         [Display(Name = "Suspension End Date (optional)")]
         [DataType(DataType.Date)]
         public DateTime? SuspensionEndDate { get; set; }

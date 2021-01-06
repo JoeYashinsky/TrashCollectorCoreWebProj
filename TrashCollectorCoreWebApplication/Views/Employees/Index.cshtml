@@ -15,9 +15,6 @@
     <a asp-action="Day" asp-day="Thursday">Thursday</a> |
     <a asp-action="Day" asp-day="Friday">Friday</a> |
 
-    <a asp-action="Details" asp-route-id="Employee.Id">Details</a>|
-    <a asp-action="Edit" asp-route-id="Employee.Id">Edit</a>
-
 </form>
 <table class="table">
     <thead>
@@ -111,19 +108,23 @@
         }
     </tbody>
 </table>
+
+<a asp-action="Details" asp-route-id="">Details</a>
+<br />
+<a asp-action="Edit" asp-route-id="">Edit</a>
 <br />
 <br />
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport"
-    content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>My Google Map</title>
     <style>
-        #map{
-            height:400px;
-            width:100%;
+        #map {
+            height: 400px;
+            width: 100%;
         }
     </style>
 </head>
@@ -131,11 +132,11 @@
     <h3>My Customers (as represented by pins on a map)</h3>
     <div id="map"></div>
     <script>
-        function initMap(){
+        function initMap() {
             // Map options
             var options = {
                 zoom: 13,
-                center: { lat: 42.5031, lng: -83.1835}
+                center: { lat: 42.5031, lng: -83.1835 }
             }
 
             // New map
@@ -165,9 +166,9 @@
 
 
             //Add Marker Function
-            function addMarker(coords){
+            function addMarker(coords) {
                 var marker = new google.maps.Marker({
-                    position:coords,
+                    position: coords,
                     map: map
                 });
             }

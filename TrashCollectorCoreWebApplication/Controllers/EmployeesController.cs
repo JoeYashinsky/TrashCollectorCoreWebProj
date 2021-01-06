@@ -42,16 +42,16 @@ namespace TrashCollectorCoreWebApplication.Controllers
             var extraCustomers = routeZipCodeCustomers.Where(c => c.ExtraPickupDate == DateTime.Today).ToList();
             var allCustomersPreSuspension = regularPickupCustomers.Concat(extraCustomers);        //var newList = a.Concat(b);
             //var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate! <= DateTime.Today && c.SuspensionEndDate! >= DateTime.Today).ToList();
-            var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate == null ? true : (c.SuspendServiceDate >= DateTime.Today && c.SuspensionEndDate <= DateTime.Today)).ToList();
+            var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate == null ? true : (c.SuspendServiceDate < DateTime.Today && c.SuspensionEndDate > DateTime.Today)).ToList();
 
 
-            return View(allCustomersToday);
+            return View("Index", allCustomersToday);
         }
 
         // POST: EmployeesController (FilterByDay)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(string pickupsForThisDay)
+        public ActionResult Day(string pickupsForThisDay)
         {
             DayOfWeekCustomers dayOfWeekCustomers = new DayOfWeekCustomers();
 
@@ -67,7 +67,9 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: EmployeesController/Details/5
         public ActionResult Details(int id)
         {
-            var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+            //var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
 
             if (employee == null)
             {
@@ -99,15 +101,15 @@ namespace TrashCollectorCoreWebApplication.Controllers
             }
             catch
             {
-                return View();
+                return View(employee);
             }
         }
 
         // GET: EmployeesController/Edit/5
         public ActionResult Edit(int id)
         {
-            var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
-            if (employee == null)
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault(); if (employee == null)
             {
                 return NotFound();
             }
@@ -131,7 +133,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
 
 
             _context.SaveChanges();
-            return RedirectToAction("Details", employee);
+            return View(employee);
         }
 
         //public bool PickupConfirmed { get; set; }  (property in Customer model)
@@ -146,7 +148,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(Index));
+                customer.BalanceDue = 0.00;
             }
             return View(customer);
 
@@ -154,7 +156,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         }
 
         // GET: EmployeesController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
             var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
             return View(employee);
@@ -163,7 +165,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // POST: EmployeesController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Employee employee)
+        public ActionResult Delete(int id)
         {
             try
             {

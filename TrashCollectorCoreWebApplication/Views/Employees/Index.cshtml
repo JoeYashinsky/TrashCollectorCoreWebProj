@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Today's Pickups</h1>
 
 
 <form asp-action="Index">
@@ -13,7 +13,11 @@
     <a asp-action="Day" asp-day="Tuesday">Tuesday</a> |
     <a asp-action="Day" asp-day="Wednesday">Wednesday</a> |
     <a asp-action="Day" asp-day="Thursday">Thursday</a> |
-    <a asp-action="Day" asp-day="Friday">Friday</a>
+    <a asp-action="Day" asp-day="Friday">Friday</a> |
+
+    <a asp-action="Details" asp-route-id="Employee.Id">Details</a>|
+    <a asp-action="Edit" asp-route-id="Employee.Id">Edit</a>
+
 </form>
 <table class="table">
     <thead>
@@ -107,6 +111,8 @@
         }
     </tbody>
 </table>
+<br />
+<br />
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -122,13 +128,13 @@
     </style>
 </head>
 <body>
-    <h1>My Google Map</h1>
+    <h3>My Customers (as represented by pins on a map)</h3>
     <div id="map"></div>
     <script>
         function initMap(){
             // Map options
             var options = {
-                zoom: 8,
+                zoom: 13,
                 center: { lat: 42.5031, lng: -83.1835}
             }
 
@@ -155,6 +161,7 @@
             addMarker({ lat: 42.491460, lng: -83.185640 });  //Brian Pill: 2657 Harvard Rd., Berkley, MI 48072
             addMarker({ lat: 42.496190, lng: -83.201870 });  //Bam Morris: 2649 Ellwood Ave., Berkley, MI 48072
             addMarker({ lat: 42.498110, lng: -83.180710 });  //Kyle Watson: 2254 Franklin Rd., Berkley, MI 48072
+            addMarker({ lat: 42.49488, lng: -83.1955 });  //Connie Writeline: 2464 Oakshire Ave., Berkley, MI 48072
 
 
             //Add Marker Function

@@ -10,6 +10,8 @@ namespace TrashCollectorCoreWebApplication.Models
     {
         [Key]
         public int Id { get; set; }
+
+        [Display(Name = "Regular Pickup Day")]
         public string Name { get; set; }
     }
 }

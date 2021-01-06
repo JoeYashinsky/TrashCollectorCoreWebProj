@@ -69,7 +69,6 @@ namespace TrashCollectorCoreWebApplication.Controllers
         {
             var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
 
-
             if (employee == null)
             {
                 return NotFound();
@@ -88,7 +87,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // POST: EmployeesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Employee employee)
+        public ActionResult Create(int id, Employee employee)
         {
             try
             {
@@ -157,7 +156,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // GET: EmployeesController/Delete/5
         public ActionResult Delete(int id)
         {
-            var employee = _context.Employees.FirstOrDefault(c => c.Id == id);
+            var employee = _context.Employees.SingleOrDefault(e => e.Id == id);
             return View(employee);
         }
 

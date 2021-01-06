@@ -9,11 +9,11 @@
 
 
 <form asp-action="Index">
-    <a asp-action="Day" asp-day="Monday">Monday</a> |
-    <a asp-action="Day" asp-day="Tuesday">Tuesday</a> |
-    <a asp-action="Day" asp-day="Wednesday">Wednesday</a> |
-    <a asp-action="Day" asp-day="Thursday">Thursday</a> |
-    <a asp-action="Day" asp-day="Friday">Friday</a> |
+    <a asp-action="FilterByDay" asp-day="Monday">Monday</a> |
+    <a asp-action="FilterByDay" asp-day="Tuesday">Tuesday</a> |
+    <a asp-action="FilterByDay" asp-day="Wednesday">Wednesday</a> |
+    <a asp-action="FilterByDay" asp-day="Thursday">Thursday</a> |
+    <a asp-action="FilterByDay" asp-day="Friday">Friday</a> |
 
 </form>
 <table class="table">
@@ -94,6 +94,10 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PickupConfirmed)
+                    <form asp-controller="Customer" asp-action="DriverConfirms" method="post">
+                        <input type="hidden" value="@item.Id" name="id" />
+                        <button type="submit">Trash Collected</button>
+                    </form>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.BalanceDue)

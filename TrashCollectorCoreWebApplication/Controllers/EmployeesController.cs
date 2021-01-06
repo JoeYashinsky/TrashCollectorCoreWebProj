@@ -42,7 +42,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
             var extraCustomers = routeZipCodeCustomers.Where(c => c.ExtraPickupDate == DateTime.Today).ToList();
             var allCustomersPreSuspension = regularPickupCustomers.Concat(extraCustomers);        //var newList = a.Concat(b);
             //var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate! <= DateTime.Today && c.SuspensionEndDate! >= DateTime.Today).ToList();
-            var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate == null ? true : (c.SuspendServiceDate < DateTime.Today && c.SuspensionEndDate > DateTime.Today)).ToList();
+            var allCustomersToday = allCustomersPreSuspension.Where(c => c.SuspendServiceDate == null ? true : (c.SuspendServiceDate > DateTime.Today && c.SuspensionEndDate < DateTime.Today)).ToList();
 
 
             return View("Index", allCustomersToday);
@@ -51,7 +51,7 @@ namespace TrashCollectorCoreWebApplication.Controllers
         // POST: EmployeesController (FilterByDay)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Day(string pickupsForThisDay)
+        public ActionResult FilterByDay(string pickupsForThisDay)
         {
             DayOfWeekCustomers dayOfWeekCustomers = new DayOfWeekCustomers();
 
